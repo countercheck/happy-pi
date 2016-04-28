@@ -4,7 +4,8 @@
   "dependencies": {
     "bootstrap-sass": "~3.3.5",
     "modernizr": "~2.8.1",
-    "moment": "^2.13.0"
+    "moment": "^2.13.0",
+    "highcharts": "^4.2.4"
   },
   "overrides": {
     "bootstrap-sass": {
