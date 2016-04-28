@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="256px"
+   height="256px"
+   viewBox="0 0 256 256"
+   version="1.1"
+   id="SVGRoot"
+   inkscape:version="0.91+devel r14482 custom"
+   sodipodi:docname="buttonSad.svg">
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.4142136"
+     inkscape:cx="128.87868"
+     inkscape:cy="135.61522"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1019"
+     inkscape:window-height="739"
+     inkscape:window-x="80"
+     inkscape:window-y="0"
+     inkscape:window-maximized="0"
+     inkscape:grid-bbox="true" />
+  <defs
+     id="defs3364" />
+  <metadata
+     id="metadata3367">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     id="layer1"
+     inkscape:groupmode="layer"
+     inkscape:label="Layer 1">
+    <ellipse
+       style="fill:#ff0000;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       id="path3380"
+       cx="129"
+       cy="126"
+       rx="115"
+       ry="110" />
+    <ellipse
+       ry="96.273224"
+       rx="100.91967"
+       cy="123.52513"
+       cx="129.00002"
+       id="ellipse3394"
+       style="fill:#d40000;fill-rule:evenodd;stroke:none;stroke-width:0.87638599px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+    <ellipse
+       style="fill:#ff0000;fill-rule:evenodd;stroke:none;stroke-width:0.75403184px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       id="ellipse4201"
+       cx="129.35355"
+       cy="123.17156"
+       rx="85.009766"
+       ry="84.605965" />
+    <path
+       style="fill:#ff8080;fill-rule:evenodd;stroke:none;stroke-width:0.63384473px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 203.75269,107.22351 a 70.491094,72.097795 65.937241 0 0 -77.61254,-63.27694 70.491094,72.097795 65.937241 0 0 -62.978213,52.211499 70.491094,72.097795 65.937241 0 1 53.816593,-32.40126 70.491094,72.097795 65.937241 0 1 77.61089,63.277091 70.491094,72.097795 65.937241 0 1 -2.56902,25.31381 70.491094,72.097795 65.937241 0 0 11.73229,-45.1242 z"
+       id="ellipse4203"
+       inkscape:connector-curvature="0" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:44.00016785px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#aa0000;fill-opacity:1;stroke:none;stroke-width:1.1000042px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="64.690247"
+       y="159.15318"
+       id="text4210"
+       sodipodi:linespacing="125%"
+       transform="scale(1.0143453,0.98585758)"><tspan
+         sodipodi:role="line"
+         id="tspan4208"
+         x="64.690247"
+         y="159.15318"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:70.40026855px;font-family:'.Helvetica LT MM';-inkscape-font-specification:'.Helvetica LT MM';letter-spacing:1.78200674px;fill:#aa0000;stroke-width:1.1000042px">Sad</tspan></text>
+    <text
+       transform="scale(1.0143453,0.98585758)"
+       sodipodi:linespacing="125%"
+       id="text4214"
+       y="155.73227"
+       x="67.239471"
+       style="font-style:normal;font-weight:normal;font-size:44.00016785px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#800000;fill-opacity:1;stroke:none;stroke-width:1.1000042px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       xml:space="preserve"><tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:70.40026855px;font-family:'.Helvetica LT MM';-inkscape-font-specification:'.Helvetica LT MM';letter-spacing:1.78200674px;fill:#800000;stroke-width:1.1000042px"
+         y="155.73227"
+         x="67.239471"
+         id="tspan4212"
+         sodipodi:role="line">Sad</tspan></text>
+  </g>
+</svg>
