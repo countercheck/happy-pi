@@ -11,10 +11,14 @@ $(function() {
       data: {
       },
       headers: {
+        // header("Access-Control-Allow-Origin: *");
       },
       dataType: 'json',
       success: function (data) {
-          console.info(data);
+          console.info("response: ", data);
+      },
+      error: function (data) {
+        console.info("error: ", data)
       }
     });
   }
