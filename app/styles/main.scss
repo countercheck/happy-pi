@@ -90,4 +90,24 @@ body {
   .jumbotron {
     border-bottom: 0;
   }
+
+  .buttons {
+    padding-left: 330px;
+    button {
+      border: 0;
+      background-size: contain;
+      width: 150px;
+      height: 150px;
+      background-color: #fff;
+    }
+    .happy {
+      background-image: url('/images/buttonHappy.svg');
+    }
+    .meh {
+      background-image: url('/images/buttonMeh.svg');
+    }
+    .sad {
+      background-image: url('/images/buttonSad.svg');
+    }
+  }
 }

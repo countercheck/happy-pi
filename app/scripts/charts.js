@@ -63,7 +63,7 @@ function buildBarGraph(container) {
         },
         title: {
             text: 'Monthly Average Score'
-        }
+        },
         xAxis: {
             categories: [
                 '04.28.2016',
