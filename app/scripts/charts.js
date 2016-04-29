@@ -62,38 +62,25 @@ function buildBarGraph(container) {
             type: 'column'
         },
         title: {
-            text: 'Monthly Average Rainfall'
-        },
-        subtitle: {
-            text: 'Source: WorldClimate.com'
-        },
+            text: 'Monthly Average Score'
+        }
         xAxis: {
             categories: [
-                'Jan',
-                'Feb',
-                'Mar',
-                'Apr',
-                'May',
-                'Jun',
-                'Jul',
-                'Aug',
-                'Sep',
-                'Oct',
-                'Nov',
-                'Dec'
+                '04.28.2016',
+                '04.29.2016'
             ],
             crosshair: true
         },
         yAxis: {
             min: 0,
             title: {
-                text: 'Rainfall (mm)'
+                text: 'score'
             }
         },
         tooltip: {
             headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
             pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
+                '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
             footerFormat: '</table>',
             shared: true,
             useHTML: true
@@ -105,20 +92,16 @@ function buildBarGraph(container) {
             }
         },
         series: [{
-            name: 'Tokyo',
-            data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4]
+            name: 'Toronto',
+            data: [1, 2]
 
         }, {
-            name: 'New York',
-            data: [83.6, 78.8, 98.5, 93.4, 106.0, 84.5, 105.0, 104.3, 91.2, 83.5, 106.6, 92.3]
+            name: 'King',
+            data: [3, 2]
 
         }, {
-            name: 'London',
-            data: [48.9, 38.8, 39.3, 41.4, 47.0, 48.3, 59.0, 59.6, 52.4, 65.2, 59.3, 51.2]
-
-        }, {
-            name: 'Berlin',
-            data: [42.4, 33.2, 34.5, 39.7, 52.6, 75.5, 57.4, 60.4, 47.6, 39.1, 46.8, 51.1]
+            name: 'Web',
+            data: [1, 2]
 
         }]
     });
@@ -128,62 +111,33 @@ function buildBarGraph(container) {
 function buildDonutGraph(container) {
 
     var colors = Highcharts.getOptions().colors,
-        categories = ['MSIE', 'Firefox', 'Chrome', 'Safari', 'Opera'],
+        categories = ['MSIE', 'Firefox', 'Chrome'],
         data = [{
             y: 56.33,
             color: colors[0],
             drilldown: {
-                name: 'MSIE versions',
-                categories: ['MSIE 6.0', 'MSIE 7.0', 'MSIE 8.0', 'MSIE 9.0', 'MSIE 10.0', 'MSIE 11.0'],
-                data: [1.06, 0.5, 17.2, 8.11, 5.33, 24.13],
+                name: 'Toronto',
+                categories: ['TO 6.0'],
+                data: [1.06],
                 color: colors[0]
             }
         }, {
             y: 10.38,
             color: colors[1],
             drilldown: {
-                name: 'Firefox versions',
-                categories: ['Firefox v31', 'Firefox v32', 'Firefox v33', 'Firefox v35', 'Firefox v36', 'Firefox v37', 'Firefox v38'],
-                data: [0.33, 0.15, 0.22, 1.27, 2.76, 2.32, 2.31, 1.02],
+                name: 'King',
+                categories: ['KG v31'],
+                data: [0.33],
                 color: colors[1]
             }
         }, {
             y: 24.03,
             color: colors[2],
             drilldown: {
-                name: 'Chrome versions',
-                categories: ['Chrome v30.0', 'Chrome v31.0', 'Chrome v32.0', 'Chrome v33.0', 'Chrome v34.0',
-                    'Chrome v35.0', 'Chrome v36.0', 'Chrome v37.0', 'Chrome v38.0', 'Chrome v39.0', 'Chrome v40.0', 'Chrome v41.0', 'Chrome v42.0', 'Chrome v43.0'
-                    ],
-                data: [0.14, 1.24, 0.55, 0.19, 0.14, 0.85, 2.53, 0.38, 0.6, 2.96, 5, 4.32, 3.68, 1.45],
+                name: 'Web',
+                categories: ['WB v30.0'],
+                data: [0.14],
                 color: colors[2]
-            }
-        }, {
-            y: 4.77,
-            color: colors[3],
-            drilldown: {
-                name: 'Safari versions',
-                categories: ['Safari v5.0', 'Safari v5.1', 'Safari v6.1', 'Safari v6.2', 'Safari v7.0', 'Safari v7.1', 'Safari v8.0'],
-                data: [0.3, 0.42, 0.29, 0.17, 0.26, 0.77, 2.56],
-                color: colors[3]
-            }
-        }, {
-            y: 0.91,
-            color: colors[4],
-            drilldown: {
-                name: 'Opera versions',
-                categories: ['Opera v12.x', 'Opera v27', 'Opera v28', 'Opera v29'],
-                data: [0.34, 0.17, 0.24, 0.16],
-                color: colors[4]
-            }
-        }, {
-            y: 0.2,
-            color: colors[5],
-            drilldown: {
-                name: 'Proprietary or Undetectable',
-                categories: [],
-                data: [],
-                color: colors[5]
             }
         }],
         browserData = [],
