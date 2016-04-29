@@ -11,7 +11,8 @@ $(function() {
       data: {
       },
       headers: {
-        // header("Access-Control-Allow-Origin: *");
+        location_id: 2,
+        emotion: emotion
       },
       dataType: 'json',
       success: function (data) {

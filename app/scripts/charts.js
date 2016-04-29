@@ -13,18 +13,26 @@ $(function () {
 
   function buildCharts(rawData) {
     var processedData = processData(rawData);
-    buildSplineGraph(processedData);
-    buildBarGraph('#bar-chart');
+    buildSplineGraph('#line-chart', processedData);
+    buildBarGraph('#bar-chart', processedData);
     buildDonutGraph('#donut-chart');
     buildDonutGraph('#donut-chart2');
     buildDonutGraph('#donut-chart3');
   }
 
-  function countByTimeByEmotion(elements){
-    return R.reduce(byTimeByEmotion, buildTimeSeriesGroup(elements), elements);
+  function countByHourByEmotion(elements){
+    return R.reduce(byHourByEmotion, buildTimeSeriesGroup(elements, "YMMDDHH", emotionNames()), elements);
   }
 
-  function byTimeByEmotion(group, element) {
+  function avgScoreByDayLocation(elements){
+    return R.reduce(avgScoreByDayByLocation, buildTimeSeriesGroup(elements, "YMMDD", locationNames()), elements);
+  }
+
+  function emotionNames() {
+    return ["sad", "meh", "happy"];
+  }
+
+  function byHourByEmotion(group, element) {
     if (group[element.emotion][dateHour(element)]) {
       group[element.emotion][dateHour(element)]['count'] += 1;
     } else {
@@ -36,26 +44,65 @@ $(function () {
     return group;
   }
 
+  function avgScoreByDayByLocation(group, element) {
+    if (group[element.location][dateDay(element)]) {
+      group[element.location][dateDay(element)]['score'] += element.emotionValue;
+      group[element.location][dateDay(element)]['count'] += 1;
+    } else {
+      group[element.location][dateDay(element)] = {
+        'score': element.emotionValue,
+        'count': 1,
+        'moment': element.moment
+      };
+    }
+    console.log(group)
+    return group;
+  }
+
   function dateHour(element) {
     return element.moment.format("YMMDDHH");
   }
 
-  function buildTimeSeriesGroup(rawData) {
+  function dateDay(element) {
+    return element.moment.format("YMMDD");
+  }
+
+  function buildTimeSeriesGroup(rawData, timeFormat, groupNames) {
     var min = moment(rawData[0].moment);
     var max = moment(rawData[rawData.length -1].moment);
-    var groups = {"sad":{}, "meh":{}, "happy": {}};
+    var groups = R.reduce(function(object, param) {
+      object[param] = {};
+      return object
+    }, {}, groupNames);
     for (min; min <= max; min.add(1, 'h')) {
-      groups.sad[min.format("YMMDDHH")] = { moment: moment(min), count: 0 };
-      groups.meh[min.format("YMMDDHH")] = { moment: moment(min), count: 0 };
-      groups.happy[min.format("YMMDDHH")] = { moment: moment(min), count: 0 };
+      groupNames.forEach(function(name){
+        groups[name][min.format(timeFormat)] = { moment: moment(min), count: 0, score: 0 };
+      });
     }
-    console.log(groups);
     return groups;
   }
 
-  function buildSplineGraph(rawData){
-    var groupedData = countByTimeByEmotion(rawData);
-    var processedData = ['happy','meh','sad'].map(function(e){
+  function buildBarGraph(container, rawData){
+    var groupedData = avgScoreByDayLocation(rawData);
+    var processedData = locationNames().map(function(e){
+      return {
+        name: e,
+        data: R.values(groupedData[e]).map(function(row){
+          var time = row.moment.toObject();
+          return [
+            Date.UTC(time.years, time.months, time.date),
+            (row.score / row.count || 0) / 2 * 100
+          ];
+        })
+      }
+    });
+    console.log(processedData);
+    drawBarGraph(container, processedData);
+  }
+
+  function buildSplineGraph(container, rawData){
+    var groupedData = countByHourByEmotion(rawData);
+    var processedData = emotionNames().map(function(e){
       return {
         name: e,
         data: R.values(groupedData[e]).map(function(row){
@@ -67,72 +114,21 @@ $(function () {
         })
       }
     });
-    console.log(processedData);
-    drawSplineGraph("#line-chart", processedData);
+
+    drawSplineGraph(container, processedData);
   }
 
   function processData(data) {
     return data.map(function(e) {
       e.moment = moment(Number(e.timestamp));
-      e.location = getLocation(e.location_id);
+      e.location = locationNames()[e.location_id];
       e.emotionValue = getEmotionValue(e.emotion);
       return e
     });
   }
 
-  function getLocation(location_id) {
-    return ["Web","Toronto"][location_id]
-  }
-
-  function buildBarGraph(container) {
-      $(container).highcharts({
-          chart: {
-              type: 'column'
-          },
-          title: {
-              text: 'Monthly Average Score'
-          },
-          xAxis: {
-              categories: [
-                  '04.28.2016',
-                  '04.29.2016'
-              ],
-              crosshair: true
-          },
-          yAxis: {
-              min: 0,
-              title: {
-                  text: 'score'
-              }
-          },
-          tooltip: {
-              headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-              pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                  '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
-              footerFormat: '</table>',
-              shared: true,
-              useHTML: true
-          },
-          plotOptions: {
-              column: {
-                  pointPadding: 0.2,
-                  borderWidth: 0
-              }
-          },
-          series: [{
-              name: 'Toronto',
-              data: [1, 2]
-
-          }, {
-              name: 'King',
-              data: [3, 2]
-
-          }, {
-              name: 'Web',
-              data: [1, 2]
-
-          }]
-      });
+  function locationNames() {
+    return ["Web","Toronto","King"];
   }
 
 
@@ -205,10 +201,7 @@ $(function () {
               type: 'pie'
           },
           title: {
-              text: 'Browser market share, January, 2015 to May, 2015'
-          },
-          subtitle: {
-              text: 'Source: <a href="http://netmarketshare.com/">netmarketshare.com</a>'
+              text: 'Average Happiness'
           },
           yAxis: {
               title: {
@@ -240,7 +233,45 @@ $(function () {
   }
 
   function getEmotionValue(emotion){
-    return {"sad":0, "meh": 1, "happy": 2}[emotion]
+    return {"sad":0, "meh": 1, "happy": 2}[emotion];
+  }
+
+  function drawBarGraph(container, timeData) {
+      $(container).highcharts({
+          chart: {
+              type: 'column'
+          },
+          title: {
+              text: 'Daily Happiness Percentage'
+          },
+          xxAxis: {
+              type: 'datetime',
+              minTickInterval: 86400000,
+              title: {
+                  text: 'Date'
+              }
+          },
+          yAxis: {
+              min: 0,
+              title: {
+                  text: 'score'
+              }
+          },
+          tooltip: {
+              headerFormat: '<span style="font-size:10px">{point.x:%e.%b}</span><table>',
+              pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' + '<td style="padding:0"><b>{point.y:.0f}%</b></td></tr>',
+              footerFormat: '</table>',
+              shared: true,
+              useHTML: true
+          },
+          plotOptions: {
+              column: {
+                  pointPadding: 0.2,
+                  borderWidth: 0
+              }
+          },
+          series: timeData
+      });
   }
 
   function drawSplineGraph(container, timeData) {
@@ -257,11 +288,8 @@ $(function () {
         },
         xAxis: {
             type: 'datetime',
-            dateTimeLabelFormats: { // don't display the dummy year
-                hour: '%e %I %p',
-            },
             title: {
-                text: 'Date'
+                text: 'Time'
             }
         },
         yAxis: {
