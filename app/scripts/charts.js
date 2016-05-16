@@ -13,11 +13,12 @@ $(function () {
 
   function buildCharts(rawData) {
     var processedData = processData(rawData);
-    buildSplineGraph('#line-chart', processedData);
-    buildBarGraph('#bar-chart', processedData);
-    buildDonutGraph('#donut-chart');
-    buildDonutGraph('#donut-chart2');
-    buildDonutGraph('#donut-chart3');
+    buildClickGraph('#line-chart', processedData);
+    buildPercentageGraph('#bar-chart', processedData);
+    var donutData = getDonutData(processedData);
+    buildDonutGraph('#donut-chart', donutData['Toronto']);
+    buildDonutGraph('#donut-chart2', donutData['London']);
+    buildDonutGraph('#donut-chart3', donutData['Web']);
   }
 
   function countByHourByEmotion(elements){
@@ -28,8 +29,40 @@ $(function () {
     return R.reduce(avgScoreByDayByLocation, buildTimeSeriesGroup(elements, "YMMDD", locationNames()), elements);
   }
 
+  function getDonutData(elements){
+    return R.reduce(byEmotionbyLocation, buildLocationCounts(), elements);
+  }
+
   function emotionNames() {
     return ["sad", "meh", "happy"];
+  }
+
+  function byEmotionbyLocation(group, element) {
+    group[element.location][element.emotion] += 1;
+    return group;
+  }
+
+  function buildLocationCounts(){
+    return {
+      'Toronto': {
+        name: 'Toronto',
+        happy: 0,
+        meh: 0,
+        sad: 0
+      },
+      'London': {
+        name: 'London',
+        happy: 0,
+        meh: 0,
+        sad: 0
+      },
+      'Web': {
+        name: 'Web',
+        happy: 0,
+        meh: 0,
+        sad: 0
+      }
+    };
   }
 
   function byHourByEmotion(group, element) {
@@ -82,7 +115,7 @@ $(function () {
     return groups;
   }
 
-  function buildBarGraph(container, rawData){
+  function buildPercentageGraph(container, rawData){
     var groupedData = avgScoreByDayLocation(rawData);
     var processedData = locationNames().map(function(e){
       return {
@@ -97,10 +130,10 @@ $(function () {
       }
     });
     console.log(processedData);
-    drawBarGraph(container, processedData);
+    drawSplineGraph(container, processedData, { title: 'Happiness by Day', subtitle: 'Average happiness (as a percentage of maximum happiness) by day, broken down by location', xLabel: 'Day', yLabel: 'Average happiness' });
   }
 
-  function buildSplineGraph(container, rawData){
+  function buildClickGraph(container, rawData, options){
     var groupedData = countByHourByEmotion(rawData);
     var processedData = emotionNames().map(function(e){
       return {
@@ -115,7 +148,7 @@ $(function () {
       }
     });
 
-    drawSplineGraph(container, processedData);
+    drawSplineGraph(container, processedData, { title: 'Clicks per Hour', subtitle: 'Clicks per hour, broken down by happiness of each click', xLabel: 'Day', yLabel: 'clicks' });
   }
 
   function processData(data) {
@@ -128,84 +161,28 @@ $(function () {
   }
 
   function locationNames() {
-    return ["Web","Toronto","King"];
+    return ["Web","Toronto","London"];
   }
 
 
-  function buildDonutGraph(container) {
-
-      var colors = Highcharts.getOptions().colors,
-          categories = ['MSIE', 'Firefox', 'Chrome'],
-          data = [{
-              y: 56.33,
-              color: colors[0],
-              drilldown: {
-                  name: 'Toronto',
-                  categories: ['TO 6.0'],
-                  data: [1.06],
-                  color: colors[0]
-              }
-          }, {
-              y: 10.38,
-              color: colors[1],
-              drilldown: {
-                  name: 'King',
-                  categories: ['KG v31'],
-                  data: [0.33],
-                  color: colors[1]
-              }
-          }, {
-              y: 24.03,
-              color: colors[2],
-              drilldown: {
-                  name: 'Web',
-                  categories: ['WB v30.0'],
-                  data: [0.14],
-                  color: colors[2]
-              }
-          }],
-          browserData = [],
-          versionsData = [],
-          i,
-          j,
-          dataLen = data.length,
-          drillDataLen,
-          brightness;
-
-
-      // Build the data arrays
-      for (i = 0; i < dataLen; i += 1) {
-
-          // add browser data
-          browserData.push({
-              name: categories[i],
-              y: data[i].y,
-              color: data[i].color
-          });
-
-          // add version data
-          drillDataLen = data[i].drilldown.data.length;
-          for (j = 0; j < drillDataLen; j += 1) {
-              brightness = 0.2 - (j / drillDataLen) / 5;
-              versionsData.push({
-                  name: data[i].drilldown.categories[j],
-                  y: data[i].drilldown.data[j],
-                  color: Highcharts.Color(data[i].color).brighten(brightness).get()
-              });
-          }
-      }
-
+  function buildDonutGraph(container, data) {
       // Create the chart
       $(container).highcharts({
           chart: {
-              type: 'pie'
+              type: 'pie',
+              height: 300
+          },
+          credits: {
+            enabled: false
           },
           title: {
-              text: 'Average Happiness'
+              text: data.name,
+              verticalAlign: 'bottom',
+            y: -70
           },
           yAxis: {
               title: {
-                  text: 'Total percent market share'
+                  text: 'Happiness breakdown'
               }
           },
           plotOptions: {
@@ -214,18 +191,27 @@ $(function () {
                   center: ['50%', '50%']
               }
           },
-          tooltip: {
-              valueSuffix: '%'
-          },
           series: [{
-              name: 'Versions',
-              data: versionsData,
-              size: '80%',
+              name: 'Count',
+              data: [{
+                y: data.happy,
+                name: 'Happy'
+              },
+              {
+                y: data.meh,
+                name: 'Meh'
+              },
+              {
+                y: data.sad,
+                name: 'Sad'
+              }],
+              size: '70%',
               innerSize: '60%',
               dataLabels: {
+                distance: -1,
                   formatter: function () {
                       // display only if larger than 1
-                      return this.y > 1 ? '<b>' + this.point.name + ':</b> ' + this.y + '%' : null;
+                      return this.y > 1 ? '<b>' + this.point.name + ':</b> ' + this.y : null;
                   }
               }
           }]
@@ -236,65 +222,30 @@ $(function () {
     return {"sad":0, "meh": 1, "happy": 2}[emotion];
   }
 
-  function drawBarGraph(container, timeData) {
-      $(container).highcharts({
-          chart: {
-              type: 'column'
-          },
-          title: {
-              text: 'Daily Happiness Percentage'
-          },
-          xxAxis: {
-              type: 'datetime',
-              minTickInterval: 86400000,
-              title: {
-                  text: 'Date'
-              }
-          },
-          yAxis: {
-              min: 0,
-              title: {
-                  text: 'score'
-              }
-          },
-          tooltip: {
-              headerFormat: '<span style="font-size:10px">{point.x:%e.%b}</span><table>',
-              pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' + '<td style="padding:0"><b>{point.y:.0f}%</b></td></tr>',
-              footerFormat: '</table>',
-              shared: true,
-              useHTML: true
-          },
-          plotOptions: {
-              column: {
-                  pointPadding: 0.2,
-                  borderWidth: 0
-              }
-          },
-          series: timeData
-      });
-  }
-
-  function drawSplineGraph(container, timeData) {
+  function drawSplineGraph(container, timeData, options) {
     $(container).highcharts({
         chart: {
             type: 'line'
         },
+        credits: {
+            enabled: false
+        },
         title: {
-            text: 'How many people clicked!'
+            text: options.title
         },
 
         subtitle: {
-            text: 'Irregular time data in Highcharts JS'
+            text: options.subtitle
         },
         xAxis: {
             type: 'datetime',
             title: {
-                text: 'Time'
+                text: options.xTitle
             }
         },
         yAxis: {
             title: {
-                text: 'Click Count'
+                text: options.yTitle
             },
             min: 0
         },
